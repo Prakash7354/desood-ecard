@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 30 6% 84%; /* Concrete */
+    --foreground: 0 0% 7%; /* Ink */
+    --card: 30 14% 98%; /* Paper */
+    --card-foreground: 0 0% 7%;
+    --popover: 30 14% 98%;
+    --popover-foreground: 0 0% 7%;
+    --primary: 357 100% 42%; /* Desood red (deep, for text & buttons) */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 7%; /* Ink */
+    --secondary-foreground: 30 14% 98%;
+    --muted: 30 6% 84%;
+    --muted-foreground: 0 0% 24%;
+    --accent: 0 100% 96%; /* Red tint */
+    --accent-foreground: 0 0% 7%;
+    --destructive: 357 100% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 6% 84%;
+    --input: 30 6% 84%;
+    --ring: 357 100% 42%;
+    --radius: 0.5rem;
+
+    /* Custom brand colors (HSL format for opacity support) */
+    --ink: 0 0% 7%; /* #121212 - logo black */
+    --paper: 30 14% 98%; /* #FAF9F7 - drawing paper */
+    --concrete: 30 6% 84%; /* #D9D6D3 */
+    --graphite: 0 0% 24%; /* #3D3D3D - body text on paper */
+    --steel: 0 0% 68%; /* #ADADAD - muted text on ink */
+    --red: 358 100% 49%; /* #F9000A - logo red, accents & large marks */
+    --red-deep: 357 100% 42%; /* #D60009 - small text & buttons (AA on white) */
+    --red-tint: 0 100% 96%;
+  }
+
+  .dark {
+    --background: 0 0% 7%;
+    --foreground: 30 14% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 30 14% 98%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 30 14% 98%;
+    --primary: 357 100% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 30 14% 98%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 68%;
+    --accent: 357 100% 42%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 357 100% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 357 100% 42%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Faint drawing-board grid for dark sections */
+  .bg-blueprint {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+}
