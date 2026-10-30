@@ -1,0 +1,7 @@
+# Keep the temporary *.pages.dev preview addresses out of search results.
+# The real address (card.desood.com) is unaffected.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
