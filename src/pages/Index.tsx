@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const CONTACT_EMAIL = 'info@desood.com';
+const CARD_URL = 'https://desood.com/';
 
 const PROJECT_TYPES = [
   'House extension',
@@ -162,12 +163,9 @@ export default function Index() {
   const [details, setDetails] = useState('');
   const [showExtra, setShowExtra] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [cardUrl, setCardUrl] = useState('https://card.desood.com');
   const [installPrompt, setInstallPrompt] = useState<'ios' | 'android' | null>(null);
 
   useEffect(() => {
-    setCardUrl(window.location.href.split('#')[0].split('?')[0]);
-
     // Check for install prompt
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as Navigator & { standalone?: boolean }).standalone;
     let hasDismissed = false;
@@ -238,14 +236,14 @@ export default function Index() {
         await navigator.share({
           title: 'Desood - Architectural · Planning · Design · Interior',
           text: 'Architectural design, planning and interiors across the UK - here is the Desood digital card.',
-          url: cardUrl,
+          url: CARD_URL,
         });
       } catch (error) {
         console.log('Error sharing:', error);
       }
     } else {
       try {
-        await navigator.clipboard.writeText(cardUrl);
+        await navigator.clipboard.writeText(CARD_URL);
         toast({
           title: "Link copied!",
           description: "Card link copied to clipboard.",
@@ -310,7 +308,7 @@ export default function Index() {
               <div className="flex flex-col items-center gap-[6px]">
                 <div className="bg-white p-2 rounded-xl border border-brand-red">
                   <QRCodeSVG
-                    value={cardUrl}
+                    value={CARD_URL}
                     size={92}
                     fgColor="#121212"
                     bgColor="#FFFFFF"
