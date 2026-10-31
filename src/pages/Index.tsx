@@ -3,7 +3,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import {
   ArrowUpRight, ArrowDown, Share2, X, CheckCircle, Mail, Home, KeyRound, TrendingUp,
   FileCheck, ShieldCheck, MessagesSquare, ArrowLeftRight, HousePlus, Triangle, PaintRoller, BedDouble,
-  Ruler, DraftingCompass, Rotate3d, PencilRuler, HardHat, Camera, MapPin, Lightbulb,
+  Ruler, DraftingCompass, Rotate3d, PencilRuler, HardHat, Camera, MapPin, Lightbulb, Stamp, Sofa,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -18,6 +18,13 @@ const PROJECT_TYPES = [
   'Change of use',
   'New build',
   'Other',
+];
+
+const DISCIPLINES = [
+  { icon: DraftingCompass, label: 'Architectural' },
+  { icon: Stamp, label: 'Planning' },
+  { icon: PencilRuler, label: 'Design' },
+  { icon: Sofa, label: 'Interior' },
 ];
 
 const PROCESS_STEPS = [
@@ -44,6 +51,7 @@ const SERVICES = [
       { icon: Triangle, name: 'Loft Conversions', text: 'Dormer, hip-to-gable and mansard lofts that add bedrooms and value.' },
       { icon: PaintRoller, name: 'Renovations & Remodelling', text: 'Open-plan living, reconfiguration and whole-house refurbishments.' },
       { icon: BedDouble, name: 'HMO & Flat Conversions', text: 'Layouts planned around space standards, fire safety and rental demand.' },
+      { icon: Sofa, name: 'Interior Design', text: 'Layouts, finishes and lighting planned around how you live.' },
     ],
   },
   {
@@ -204,11 +212,11 @@ export default function Index() {
       'FN:Desood',
       'ORG:Desood',
       'X-ABShowAs:COMPANY',
-      'TITLE:Architectural Design & Planning',
+      'TITLE:Architectural · Planning · Design · Interior',
       `EMAIL;TYPE=WORK:${CONTACT_EMAIL}`,
       'URL:https://desood.com',
       'ADR;TYPE=WORK:;;;;;;United Kingdom',
-      'NOTE:Architectural design and planning permission for UK homeowners\\, landlords and property investors.',
+      'NOTE:Architectural design\\, planning permission and interiors for UK homeowners\\, landlords and property investors.',
       ...(photo ? [photo] : []),
       'END:VCARD',
     ].join('\r\n');
@@ -228,8 +236,8 @@ export default function Index() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Desood - Architectural Design & Planning',
-          text: 'Architectural design and planning permission across the UK - here is the Desood digital card.',
+          title: 'Desood - Architectural · Planning · Design · Interior',
+          text: 'Architectural design, planning and interiors across the UK - here is the Desood digital card.',
           url: cardUrl,
         });
       } catch (error) {
@@ -315,10 +323,20 @@ export default function Index() {
               </div>
             </div>
 
-            <h1 className="font-display text-[22px] font-bold leading-[1.2] mt-5">
-              Architectural design &amp; planning<span className="text-brand-red">.</span>
+            <h1 className="mt-5 flex items-end justify-between rounded-full border border-white/15 bg-white/[0.05] px-[14px] py-[10px] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+              {DISCIPLINES.map(({ icon: Icon, label }, i) => (
+                <React.Fragment key={label}>
+                  {i > 0 && <span className="w-[5px] h-[5px] mb-[3px] rounded-full bg-brand-red shrink-0" aria-hidden="true" />}
+                  <span className="flex flex-col items-center gap-[5px]">
+                    <Icon className="w-[18px] h-[18px] text-brand-red" strokeWidth={1.75} aria-hidden="true" />
+                    <span className="font-display text-[10px] min-[380px]:text-[11px] font-semibold tracking-[0.03em] leading-none">
+                      {label}<span className="sr-only">.</span>
+                    </span>
+                  </span>
+                </React.Fragment>
+              ))}
             </h1>
-            <p className="text-[12px] text-brand-steel mt-[5px] font-mono tracking-[0.02em]">
+            <p className="text-[12px] text-brand-steel mt-3 text-center text-balance font-mono tracking-[0.02em]">
               For homeowners, landlords &amp; property investors
             </p>
 
