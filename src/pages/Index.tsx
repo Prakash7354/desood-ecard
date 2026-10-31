@@ -3,7 +3,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import {
   ArrowUpRight, ArrowDown, Share2, X, CheckCircle, Mail, Home, KeyRound, TrendingUp,
   FileCheck, ShieldCheck, MessagesSquare, ArrowLeftRight, HousePlus, Triangle, PaintRoller, BedDouble,
-  Ruler, DraftingCompass, Rotate3d, PencilRuler, HardHat, Camera, MapPin, Lightbulb, Stamp, Sofa,
+  Ruler, DraftingCompass, Rotate3d, PencilRuler, HardHat, Camera, MapPin, Lightbulb, Stamp, DoorOpen,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -24,7 +24,7 @@ const DISCIPLINES = [
   { icon: DraftingCompass, label: 'Architectural' },
   { icon: Stamp, label: 'Planning' },
   { icon: PencilRuler, label: 'Design' },
-  { icon: Sofa, label: 'Interior' },
+  { icon: DoorOpen, label: 'Interior' },
 ];
 
 const PROCESS_STEPS = [
@@ -51,7 +51,7 @@ const SERVICES = [
       { icon: Triangle, name: 'Loft Conversions', text: 'Dormer, hip-to-gable and mansard lofts that add bedrooms and value.' },
       { icon: PaintRoller, name: 'Renovations & Remodelling', text: 'Open-plan living, reconfiguration and whole-house refurbishments.' },
       { icon: BedDouble, name: 'HMO & Flat Conversions', text: 'Layouts planned around space standards, fire safety and rental demand.' },
-      { icon: Sofa, name: 'Interior Design', text: 'Layouts, finishes and lighting planned around how you live.' },
+      { icon: DoorOpen, name: 'Interior Design', text: 'Interior spaces planned as part of the architecture: layout, flow, light and built-in storage.' },
     ],
   },
   {
