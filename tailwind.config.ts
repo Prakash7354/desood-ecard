@@ -27,6 +27,7 @@ export default {
         "brand-red": "hsl(var(--red))",
         "brand-red-deep": "hsl(var(--red-deep))",
         "brand-red-tint": "hsl(var(--red-tint))",
+        "brand-desk": "hsl(var(--desk))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

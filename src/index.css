@@ -38,6 +38,7 @@ All colors MUST be HSL.
     --red: 358 100% 49%; /* #F9000A - logo red, accents & large marks */
     --red-deep: 357 100% 42%; /* #D60009 - small text & buttons (AA on white) */
     --red-tint: 0 100% 96%;
+    --desk: 30 8% 91%; /* #EAE8E5 - surface the cards sit on */
   }
 
   .dark {
@@ -79,6 +80,14 @@ All colors MUST be HSL.
     background-image:
       linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  /* Drafting-table grid behind the card stack */
+  .bg-drafting {
+    background-image:
+      linear-gradient(rgba(18, 18, 18, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18, 18, 18, 0.05) 1px, transparent 1px);
     background-size: 22px 22px;
   }
 }

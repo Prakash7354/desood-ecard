@@ -97,14 +97,52 @@ const blobToBase64 = (blob: Blob) =>
     reader.readAsDataURL(blob);
   });
 
-// Gable roof divider, echoing the triangle in the Desood logo
-const RoofLine = ({ bg, roof }: { bg: string; roof: string }) => (
-  <div className={`block w-full leading-none ${bg}`} aria-hidden="true">
-    <svg viewBox="0 0 430 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto block">
-      <path d="M0 40L215 4L430 40Z" className={roof} />
-      <path d="M0 40L215 4L430 40" className="stroke-brand-red" strokeWidth="1.5" />
-    </svg>
+const AUDIENCES = [
+  { icon: Home, title: 'Homeowners', text: 'Extensions, loft conversions and renovations that give you the space you need, designed with planning approval in mind.' },
+  { icon: KeyRound, title: 'Landlords', text: 'HMO and flat conversions and layout upgrades, designed around room-size standards and Building Regulations.' },
+  { icon: TrendingUp, title: 'Property investors', text: "Feasibility studies, permitted development and change-of-use routes to understand and unlock a site's potential." },
+];
+
+const CARD_COUNT = 6;
+
+const PAPER_CARD = 'relative bg-brand-paper rounded-[18px] p-[22px] border border-brand-ink/[0.06] shadow-[0_10px_28px_-16px_rgba(18,18,18,0.45)]';
+const INK_CARD = 'relative bg-brand-ink bg-blueprint text-brand-paper rounded-[18px] p-[22px] overflow-hidden shadow-[0_18px_40px_-16px_rgba(18,18,18,0.7)]';
+const INPUT = 'w-full bg-white border border-brand-concrete rounded-lg p-[12px_14px] text-[14.5px] font-body text-brand-ink mb-[9px] placeholder:text-[#767676] focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3';
+const ACTION_BUTTON = 'w-full bg-brand-paper border border-brand-ink/15 text-brand-ink p-[11px_12px] rounded-[10px] text-[12.5px] font-semibold flex items-center justify-center gap-2 shadow-sm hover:border-brand-red-deep hover:text-brand-red-deep transition-colors focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3';
+
+const LABEL_TONES = {
+  paper: ['text-brand-red-deep', 'text-brand-graphite/60'],
+  ink: ['text-brand-red', 'text-brand-steel'],
+  red: ['text-white', 'text-white/70'],
+};
+
+// Card header: section name on the left, position in the card set on the right
+const CardLabel = ({ label, index, tone = 'paper' }: { label: string; index: number; tone?: keyof typeof LABEL_TONES }) => {
+  const [labelColor, indexColor] = LABEL_TONES[tone];
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return (
+    <div className="flex justify-between items-center font-mono text-[10.5px] tracking-[0.12em] uppercase mb-[14px]">
+      <span className={labelColor}>{label}</span>
+      <span className={indexColor}>{pad(index)} / {pad(CARD_COUNT)}</span>
+    </div>
+  );
+};
+
+// Printer's crop marks in each corner, like a business card proof
+const CropMarks = ({ color }: { color: string }) => (
+  <div aria-hidden="true" className="pointer-events-none absolute inset-[9px]">
+    {['top-0 left-0 border-t border-l', 'top-0 right-0 border-t border-r', 'bottom-0 left-0 border-b border-l', 'bottom-0 right-0 border-b border-r'].map((pos) => (
+      <span key={pos} className={`absolute w-[10px] h-[10px] ${pos} ${color}`} />
+    ))}
   </div>
+);
+
+// Faint gable outline, echoing the triangle in the Desood logo
+const GableWatermark = ({ stroke }: { stroke: string }) => (
+  <svg viewBox="0 0 260 150" fill="none" aria-hidden="true" className="pointer-events-none absolute -right-10 -bottom-4 w-[280px]">
+    <path d="M6 148L130 14L254 148" className={stroke} strokeWidth="2" />
+    <path d="M58 148L130 70L202 148" className={stroke} strokeWidth="2" />
+  </svg>
 );
 
 export default function Index() {
@@ -247,206 +285,196 @@ export default function Index() {
 
   return (
     <div className="flex justify-center min-h-screen bg-brand-concrete font-body text-brand-ink antialiased">
-      <div className="w-full max-w-[430px] bg-brand-paper min-h-screen relative overflow-hidden shadow-[0_0_60px_rgba(18,18,18,0.18)] animate-in fade-in zoom-in-[0.98] duration-1000">
+      <div className="w-full max-w-[430px] bg-brand-desk bg-drafting min-h-screen relative overflow-hidden shadow-[0_0_60px_rgba(18,18,18,0.18)] px-[14px] pt-[18px] pb-[28px] space-y-[14px]">
 
-        {/* HERO */}
-        <div className="bg-brand-ink bg-blueprint text-brand-paper min-h-[100svh] flex flex-col p-[22px_22px_18px] relative">
-          <div className="animate-in fade-in slide-in-from-top-8 duration-1000" style={{ animationFillMode: 'both', animationDelay: '200ms' }}>
-            <div className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-brand-red flex justify-between items-center">
-              <span>Desood // Digital Card</span>
-              <span>UK-wide</span>
-            </div>
-          </div>
+        {/* BUSINESS CARD */}
+        <div className={`${INK_CARD} pb-[26px] animate-in fade-in zoom-in-95 duration-700`} style={{ animationFillMode: 'both', animationDelay: '150ms' }}>
+          <GableWatermark stroke="stroke-white/[0.07]" />
+          <CropMarks color="border-brand-red/60" />
+          <div className="relative">
+            <CardLabel label="Desood // Digital card" index={1} tone="ink" />
 
-          <div className="grid grid-cols-[1fr_auto] gap-4 items-center mt-5 animate-in fade-in slide-in-from-bottom-8 duration-1000" style={{ animationFillMode: 'both', animationDelay: '400ms' }}>
-            <div className="bg-white rounded-xl p-3 flex items-center justify-center">
-              <img src="/desood-logo.png" alt="Desood Design logo" width={800} height={484} className="w-full h-auto" />
-            </div>
-
-            <div className="flex flex-col items-center gap-[6px]">
-              <div className="bg-white p-2 rounded-xl border border-brand-red">
-                <QRCodeSVG
-                  value={cardUrl}
-                  size={96}
-                  fgColor="#121212"
-                  bgColor="#FFFFFF"
-                  level="H"
-                />
+            <div className="grid grid-cols-[1fr_auto] gap-4 items-center">
+              <div className="bg-white rounded-xl p-3 flex items-center justify-center">
+                <img src="/desood-logo.png" alt="Desood Design logo" width={800} height={484} className="w-full h-auto" />
               </div>
-              <div className="font-mono text-[9.5px] tracking-[0.08em] uppercase text-brand-steel text-center leading-[1.3]">
-                Scan to<br/>share this card <ArrowUpRight className="inline w-3 h-3" />
+
+              <div className="flex flex-col items-center gap-[6px]">
+                <div className="bg-white p-2 rounded-xl border border-brand-red">
+                  <QRCodeSVG
+                    value={cardUrl}
+                    size={92}
+                    fgColor="#121212"
+                    bgColor="#FFFFFF"
+                    level="H"
+                  />
+                </div>
+                <div className="font-mono text-[9.5px] tracking-[0.08em] uppercase text-brand-steel text-center leading-[1.3]">
+                  Scan to<br/>share this card <ArrowUpRight className="inline w-3 h-3" />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="mt-5 animate-in fade-in slide-in-from-bottom-8 duration-1000" style={{ animationFillMode: 'both', animationDelay: '500ms' }}>
-            <h1 className="font-display text-[23px] font-bold leading-[1.2]">
+            <h1 className="font-display text-[22px] font-bold leading-[1.2] mt-5">
               Architectural design &amp; planning<span className="text-brand-red">.</span>
             </h1>
-            <p className="text-[12.5px] text-brand-steel mt-[5px] font-mono tracking-[0.02em]">
+            <p className="text-[12px] text-brand-steel mt-[5px] font-mono tracking-[0.02em]">
               For homeowners, landlords &amp; property investors
             </p>
-          </div>
 
-          <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000" style={{ animationFillMode: 'both', animationDelay: '600ms' }}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={downloadVCard}
-                  className="w-full mt-4 bg-transparent border border-brand-steel/40 text-brand-steel p-[9px_12px] rounded-[7px] text-[12px] font-mono tracking-[0.02em] flex items-center justify-center gap-2 hover:border-brand-red hover:text-brand-paper transition-colors focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3"
-                >
-                  <ArrowDown className="w-4 h-4" />
-                  Save our contact to your phone
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Download VCard (.vcf)</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <button
-              onClick={handleShare}
-              className="w-full mt-2 bg-transparent border border-brand-steel/40 text-brand-steel p-[9px_12px] rounded-[7px] text-[12px] font-mono tracking-[0.02em] flex items-center justify-center gap-2 hover:border-brand-red hover:text-brand-paper transition-colors focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3"
-            >
-              <Share2 className="w-4 h-4" />
-              Share this card
-            </button>
-          </div>
-
-          <p className="font-display text-[15.5px] font-medium leading-[1.5] text-brand-paper mt-[22px] pl-3 border-l-2 border-brand-red animate-in fade-in slide-in-from-bottom-8 duration-1000" style={{ animationFillMode: 'both', animationDelay: '800ms' }}>
-            We design extensions, conversions and renovations across the UK, and get them through planning, so you can build with confidence.
-          </p>
-
-          <div className="mt-5 bg-brand-paper/5 border border-brand-steel/25 rounded-[14px] p-4 animate-in fade-in slide-in-from-bottom-8 duration-1000" style={{ animationFillMode: 'both', animationDelay: '1000ms' }}>
-            <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-brand-steel mb-[10px] block">
-              Quick enquiry
-            </span>
-            <form onSubmit={handleEnquiry}>
-              <input
-                type="text"
-                placeholder="Your name"
-                aria-label="Your name"
-                autoComplete="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full bg-white border-none rounded-lg p-[12px_14px] text-[14.5px] font-body text-brand-ink mb-[9px] placeholder:text-[#767676] focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3"
-              />
-              <input
-                type="tel"
-                placeholder="Mobile number"
-                aria-label="Mobile number"
-                autoComplete="tel"
-                value={phone}
-                onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
-                className="w-full bg-white border-none rounded-lg p-[12px_14px] text-[14.5px] font-body text-brand-ink mb-[9px] placeholder:text-[#767676] focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3"
-              />
-
-              <div className="mt-1 mb-[12px]" role="group" aria-label="Project type">
-                <span className="font-mono text-[10px] tracking-[0.08em] uppercase text-brand-steel block mb-[7px]">What's the project?</span>
-                <div className="flex flex-wrap gap-[6px]">
-                  {PROJECT_TYPES.map((type) => (
-                    <button
-                      key={type}
-                      type="button"
-                      aria-pressed={projectType === type}
-                      onClick={() => setProjectType(projectType === type ? '' : type)}
-                      className={`px-[10px] py-[6px] rounded-full text-[12px] border transition-colors focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-2 ${
-                        projectType === type
-                          ? 'bg-brand-red-deep border-brand-red-deep text-white'
-                          : 'bg-transparent border-brand-steel/40 text-brand-steel hover:border-brand-red hover:text-brand-paper'
-                      }`}
-                    >
-                      {type}
-                    </button>
-                  ))}
-                </div>
+            <div className="mt-4 pt-4 border-t border-brand-steel/20 space-y-[9px] text-[13.5px]">
+              <a href={mailtoLink('Project enquiry')} className="flex items-center gap-[10px] w-fit hover:text-brand-red transition-colors focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3">
+                <Mail className="w-4 h-4 text-brand-red" /> {CONTACT_EMAIL}
+              </a>
+              <div className="flex items-center gap-[10px] text-brand-steel">
+                <MapPin className="w-4 h-4 text-brand-red" /> Projects across the United Kingdom
               </div>
-
-              {!showExtra ? (
-                <button
-                  type="button"
-                  onClick={() => setShowExtra(true)}
-                  className="w-full text-left text-[11.5px] font-mono text-brand-steel hover:text-brand-red mb-[12px] transition-colors"
-                >
-                  + Add postcode &amp; project details (optional)
-                </button>
-              ) : (
-                <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                  <input
-                    type="text"
-                    placeholder="Property postcode"
-                    aria-label="Property postcode"
-                    autoComplete="postal-code"
-                    value={postcode}
-                    onChange={(e) => setPostcode(e.target.value)}
-                    className="w-full bg-white border-none rounded-lg p-[12px_14px] text-[14.5px] font-body text-brand-ink mb-[9px] uppercase placeholder:normal-case placeholder:text-[#767676] focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3"
-                  />
-                  <textarea
-                    placeholder="Tell us briefly what you're planning"
-                    aria-label="Project details"
-                    rows={3}
-                    value={details}
-                    onChange={(e) => setDetails(e.target.value)}
-                    className="w-full bg-white border-none rounded-lg p-[12px_14px] text-[14.5px] font-body text-brand-ink mb-[9px] resize-none placeholder:text-[#767676] focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowExtra(false);
-                      setPostcode('');
-                      setDetails('');
-                    }}
-                    className="w-full text-left text-[11.5px] font-mono text-brand-steel hover:text-brand-red mb-[12px] transition-colors"
-                  >
-                    - Hide optional fields
-                  </button>
-                </div>
-              )}
-              {isSuccess ? (
-                <div className="w-full bg-brand-red-deep text-white p-[13px] rounded-lg text-[14px] font-semibold flex flex-col items-center justify-center gap-1 animate-in zoom-in duration-300" role="status">
-                  <span className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 animate-in slide-in-from-bottom-2 fade-in duration-500" />
-                    Opening your email app…
-                  </span>
-                  <span className="text-[11.5px] font-normal font-mono opacity-90">
-                    Nothing happened? Email <a href={mailtoLink('Project enquiry')} className="underline">{CONTACT_EMAIL}</a>
-                  </span>
-                </div>
-              ) : (
-                <button
-                  type="submit"
-                  className="w-full bg-brand-red-deep text-white p-[13px] rounded-lg text-[14.5px] font-semibold tracking-[0.01em] hover:brightness-110 active:scale-95 transition-all focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3 flex items-center justify-center gap-2"
-                >
-                  Send my enquiry
-                </button>
-              )}
-            </form>
+            </div>
           </div>
-
-          <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000" style={{ animationFillMode: 'both', animationDelay: '1200ms' }}>
-            <a
-              href={mailtoLink('Project enquiry')}
-              className="mt-[14px] w-full bg-transparent border-[1.5px] border-brand-red text-brand-paper p-[13px] rounded-lg text-[14px] font-semibold flex items-center justify-center gap-2 hover:bg-brand-red/10 transition-colors focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3"
-            >
-              <Mail className="w-4 h-4" /> {CONTACT_EMAIL}
-            </a>
-          </div>
-
-          <div className="mt-auto pt-4 flex flex-col items-center gap-1 text-brand-steel font-mono text-[9.5px] tracking-[0.12em] uppercase animate-in fade-in duration-1000" style={{ animationFillMode: 'both', animationDelay: '1400ms' }}>
-            More below
-            <ArrowDown className="w-4 h-4 animate-bounce" />
-          </div>
+          <div className="absolute bottom-0 inset-x-0 h-[5px] bg-brand-red" aria-hidden="true" />
         </div>
 
-        <RoofLine bg="bg-brand-ink" roof="fill-brand-paper" />
+        <div className="grid grid-cols-2 gap-2 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationFillMode: 'both', animationDelay: '400ms' }}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button onClick={downloadVCard} className={ACTION_BUTTON}>
+                <ArrowDown className="w-4 h-4 text-brand-red-deep" />
+                Save contact
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Download VCard (.vcf)</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <button onClick={handleShare} className={ACTION_BUTTON}>
+            <Share2 className="w-4 h-4 text-brand-red-deep" />
+            Share card
+          </button>
+        </div>
+
+        {/* QUICK ENQUIRY */}
+        <section className={`${PAPER_CARD} animate-in fade-in slide-in-from-bottom-6 duration-700`} style={{ animationFillMode: 'both', animationDelay: '600ms' }}>
+          <CardLabel label="Quick enquiry" index={2} />
+          <p className="font-display text-[15px] font-medium leading-[1.5] text-brand-ink pl-3 border-l-2 border-brand-red mb-[18px]">
+            We design extensions, conversions and renovations across the UK, and get them through planning, so you can build with confidence.
+          </p>
+          <form onSubmit={handleEnquiry}>
+            <input
+              type="text"
+              placeholder="Your name"
+              aria-label="Your name"
+              autoComplete="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={INPUT}
+            />
+            <input
+              type="tel"
+              placeholder="Mobile number"
+              aria-label="Mobile number"
+              autoComplete="tel"
+              value={phone}
+              onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
+              className={INPUT}
+            />
+
+            <div className="mt-1 mb-[12px]" role="group" aria-label="Project type">
+              <span className="font-mono text-[10px] tracking-[0.08em] uppercase text-brand-graphite block mb-[7px]">What's the project?</span>
+              <div className="flex flex-wrap gap-[6px]">
+                {PROJECT_TYPES.map((type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    aria-pressed={projectType === type}
+                    onClick={() => setProjectType(projectType === type ? '' : type)}
+                    className={`px-[10px] py-[6px] rounded-full text-[12px] border transition-colors focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-2 ${
+                      projectType === type
+                        ? 'bg-brand-red-deep border-brand-red-deep text-white'
+                        : 'bg-white border-brand-ink/15 text-brand-graphite hover:border-brand-red-deep hover:text-brand-red-deep'
+                    }`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {!showExtra ? (
+              <button
+                type="button"
+                onClick={() => setShowExtra(true)}
+                className="w-full text-left text-[11.5px] font-mono text-brand-graphite hover:text-brand-red-deep mb-[12px] transition-colors"
+              >
+                + Add postcode &amp; project details (optional)
+              </button>
+            ) : (
+              <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                <input
+                  type="text"
+                  placeholder="Property postcode"
+                  aria-label="Property postcode"
+                  autoComplete="postal-code"
+                  value={postcode}
+                  onChange={(e) => setPostcode(e.target.value)}
+                  className={`${INPUT} uppercase placeholder:normal-case`}
+                />
+                <textarea
+                  placeholder="Tell us briefly what you're planning"
+                  aria-label="Project details"
+                  rows={3}
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
+                  className={`${INPUT} resize-none`}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowExtra(false);
+                    setPostcode('');
+                    setDetails('');
+                  }}
+                  className="w-full text-left text-[11.5px] font-mono text-brand-graphite hover:text-brand-red-deep mb-[12px] transition-colors"
+                >
+                  - Hide optional fields
+                </button>
+              </div>
+            )}
+            {isSuccess ? (
+              <div className="w-full bg-brand-red-deep text-white p-[13px] rounded-lg text-[14px] font-semibold flex flex-col items-center justify-center gap-1 animate-in zoom-in duration-300" role="status">
+                <span className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 animate-in slide-in-from-bottom-2 fade-in duration-500" />
+                  Opening your email app…
+                </span>
+                <span className="text-[11.5px] font-normal font-mono opacity-90">
+                  Nothing happened? Email <a href={mailtoLink('Project enquiry')} className="underline">{CONTACT_EMAIL}</a>
+                </span>
+              </div>
+            ) : (
+              <button
+                type="submit"
+                className="w-full bg-brand-red-deep text-white p-[13px] rounded-lg text-[14.5px] font-semibold tracking-[0.01em] hover:brightness-110 active:scale-95 transition-all focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3 flex items-center justify-center gap-2"
+              >
+                Send my enquiry
+              </button>
+            )}
+          </form>
+
+          <a
+            href={mailtoLink('Project enquiry')}
+            className="mt-[10px] w-full border-[1.5px] border-brand-red-deep text-brand-red-deep p-[12px] rounded-lg text-[14px] font-semibold flex items-center justify-center gap-2 hover:bg-brand-red-tint transition-colors focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3"
+          >
+            <Mail className="w-4 h-4" /> {CONTACT_EMAIL}
+          </a>
+        </section>
 
         {/* ABOUT */}
-        <section className="p-[38px_24px] bg-brand-paper">
-          <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-brand-red-deep mb-[10px]">About Desood</div>
-          <h2 className="font-display text-[24px] font-bold mb-[14px] leading-[1.25]">
+        <section className={PAPER_CARD}>
+          <CardLabel label="About Desood" index={3} />
+          <h2 className="font-display text-[22px] font-bold mb-[12px] leading-[1.25]">
             Good design, planned properly from day one
           </h2>
-          <div className="text-[14.5px] leading-[1.7] text-brand-graphite space-y-3">
+          <div className="text-[14px] leading-[1.65] text-brand-graphite space-y-3">
             <p>
               Desood is a UK architectural design practice helping people improve, extend and add value to their property. We take you from first idea to approved, buildable drawings, with planning rules designed in from the start rather than fixed at the end.
             </p>
@@ -455,7 +483,7 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="relative mt-8">
+          <div className="relative mt-7">
             <div className="absolute top-[22px] left-[12.5%] right-[12.5%] border-t border-dashed border-brand-red/50" aria-hidden="true" />
             <ol className="relative grid grid-cols-4" aria-label="How a project runs">
               {PROCESS_STEPS.map(({ icon: Icon, label }) => (
@@ -469,9 +497,9 @@ export default function Index() {
             </ol>
           </div>
 
-          <div className="mt-10 pt-8 border-t border-brand-concrete">
-            <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-brand-red-deep mb-[16px]">Our approach</div>
-            <div className="space-y-6">
+          <div className="mt-7 pt-6 border-t border-brand-concrete">
+            <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-brand-red-deep mb-[14px]">Our approach</div>
+            <div className="space-y-5">
               <div>
                 <h4 className="font-display font-semibold text-[16px] text-brand-ink flex items-center gap-[8px]">
                   <span className="w-6 h-6 rounded-full bg-brand-red-tint text-brand-red-deep flex items-center justify-center text-[12px] border border-brand-red">P</span>
@@ -501,129 +529,119 @@ export default function Index() {
               </div>
             </div>
           </div>
+        </section>
 
-          {/* WHO WE HELP */}
-          <div className="mt-10 pt-8 border-t border-brand-concrete">
-            <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-brand-red-deep mb-[16px]">Who we help</div>
-            <div className="space-y-3">
-              <div className="bg-white border border-brand-concrete border-t-[3px] border-t-brand-red rounded-xl p-4">
-                <h3 className="font-display font-semibold text-[16px] flex items-center gap-2">
-                  <Home className="w-[18px] h-[18px] text-brand-red-deep" /> Homeowners
-                </h3>
-                <p className="text-[13.5px] leading-[1.6] text-brand-graphite mt-[6px]">
-                  Extensions, loft conversions and renovations that give you the space you need, designed with planning approval in mind.
-                </p>
+        {/* WHO WE HELP */}
+        <section className={PAPER_CARD}>
+          <CardLabel label="Who we help" index={4} />
+          <div className="divide-y divide-brand-concrete">
+            {AUDIENCES.map(({ icon: Icon, title, text }) => (
+              <div key={title} className="flex gap-3 items-start py-[14px] first:pt-0 last:pb-0">
+                <span className="w-9 h-9 shrink-0 rounded-lg bg-brand-red-tint border border-brand-red/40 flex items-center justify-center text-brand-red-deep">
+                  <Icon className="w-[18px] h-[18px]" strokeWidth={1.75} aria-hidden="true" />
+                </span>
+                <div>
+                  <h3 className="font-display font-semibold text-[15.5px]">{title}</h3>
+                  <p className="text-[13px] leading-[1.55] text-brand-graphite mt-[3px]">{text}</p>
+                </div>
               </div>
-              <div className="bg-white border border-brand-concrete border-t-[3px] border-t-brand-red rounded-xl p-4">
-                <h3 className="font-display font-semibold text-[16px] flex items-center gap-2">
-                  <KeyRound className="w-[18px] h-[18px] text-brand-red-deep" /> Landlords
-                </h3>
-                <p className="text-[13.5px] leading-[1.6] text-brand-graphite mt-[6px]">
-                  HMO and flat conversions and layout upgrades, designed around room-size standards and Building Regulations.
-                </p>
-              </div>
-              <div className="bg-white border border-brand-concrete border-t-[3px] border-t-brand-red rounded-xl p-4">
-                <h3 className="font-display font-semibold text-[16px] flex items-center gap-2">
-                  <TrendingUp className="w-[18px] h-[18px] text-brand-red-deep" /> Property investors
-                </h3>
-                <p className="text-[13.5px] leading-[1.6] text-brand-graphite mt-[6px]">
-                  Feasibility studies, permitted development and change-of-use routes to understand and unlock a site's potential.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
-        <RoofLine bg="bg-brand-paper" roof="fill-brand-ink" />
-
         {/* SERVICES */}
-        <section className="p-[38px_24px] bg-brand-ink bg-blueprint text-brand-paper">
-          <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-brand-red mb-[10px]">What we do</div>
-          <h2 className="font-display text-[24px] font-bold mb-[20px]">
-            From first sketch to approval
-          </h2>
+        <section className={INK_CARD}>
+          <CropMarks color="border-brand-red/60" />
+          <div className="relative">
+            <CardLabel label="What we do" index={5} tone="ink" />
+            <h2 className="font-display text-[22px] font-bold mb-[18px]">
+              From first sketch to approval
+            </h2>
 
-          <figure className="relative mb-6 rounded-xl overflow-hidden border border-brand-steel/25">
-            <img
-              src="/plans-to-home.jpg"
-              alt="Architectural floor plans with a drafting compass and pencil, beside a tablet showing a finished kitchen"
-              width={800}
-              height={528}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-auto block"
-            />
-            <figcaption className="absolute left-3 bottom-3 bg-brand-ink/85 backdrop-blur-sm text-brand-paper font-mono text-[10px] tracking-[0.1em] uppercase px-[10px] py-[6px] rounded-md flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-red" aria-hidden="true" />
-              From plans to finished home
-            </figcaption>
-          </figure>
+            <figure className="relative mb-6 rounded-xl overflow-hidden border border-brand-steel/25">
+              <img
+                src="/plans-to-home.jpg"
+                alt="Architectural floor plans with a drafting compass and pencil, beside a tablet showing a finished kitchen"
+                width={800}
+                height={528}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-auto block"
+              />
+              <figcaption className="absolute left-3 bottom-3 bg-brand-ink/85 backdrop-blur-sm text-brand-paper font-mono text-[10px] tracking-[0.1em] uppercase px-[10px] py-[6px] rounded-md flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-brand-red" aria-hidden="true" />
+                From plans to finished home
+              </figcaption>
+            </figure>
 
-          {SERVICES.map((group, i) => (
-            <div key={group.title} className={`py-4 border-t border-brand-steel/20 ${i === SERVICES.length - 1 ? 'pb-0' : ''}`}>
-              <h3 className="font-display text-[16.5px] font-semibold mb-4 flex items-baseline gap-[10px]">
-                <span className="font-mono text-[11px] font-normal text-brand-red">0{i + 1}</span>
-                {group.title}
-              </h3>
-              <div className="space-y-4">
-                {group.items.map(({ icon: Icon, name, text }) => (
-                  <div key={name} className="flex gap-3 items-start">
-                    <span className="w-9 h-9 shrink-0 rounded-lg bg-brand-red/10 border border-brand-red/30 flex items-center justify-center text-brand-red">
-                      <Icon className="w-[18px] h-[18px]" strokeWidth={1.75} aria-hidden="true" />
-                    </span>
-                    <div>
-                      <div className="text-[13.5px] font-semibold text-brand-paper mb-[2px] leading-[1.35]">{name}</div>
-                      <p className="text-[12.5px] leading-[1.5] text-brand-steel">{text}</p>
+            {SERVICES.map((group, i) => (
+              <div key={group.title} className={`py-4 border-t border-brand-steel/20 ${i === SERVICES.length - 1 ? 'pb-1' : ''}`}>
+                <h3 className="font-display text-[16.5px] font-semibold mb-4 flex items-baseline gap-[10px]">
+                  <span className="font-mono text-[11px] font-normal text-brand-red">0{i + 1}</span>
+                  {group.title}
+                </h3>
+                <div className="space-y-4">
+                  {group.items.map(({ icon: Icon, name, text }) => (
+                    <div key={name} className="flex gap-3 items-start">
+                      <span className="w-9 h-9 shrink-0 rounded-lg bg-brand-red/10 border border-brand-red/30 flex items-center justify-center text-brand-red">
+                        <Icon className="w-[18px] h-[18px]" strokeWidth={1.75} aria-hidden="true" />
+                      </span>
+                      <div>
+                        <div className="text-[13.5px] font-semibold text-brand-paper mb-[2px] leading-[1.35]">{name}</div>
+                        <p className="text-[12.5px] leading-[1.5] text-brand-steel">{text}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </section>
 
-        <RoofLine bg="bg-brand-ink" roof="fill-brand-paper" />
-
         {/* CONTACT */}
-        <section className="p-[38px_24px] bg-brand-paper text-center">
-          <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-brand-red-deep mb-[10px]">Start your project</div>
-          <h2 className="font-display text-[22px] font-bold mb-[10px] leading-[1.25]">
-            Tell us what you're planning
-          </h2>
-          <p className="text-[14px] leading-[1.6] text-brand-graphite mb-[22px] max-w-[320px] mx-auto">
-            Send a few details and photos of your property and we'll come back to you with the next steps.
-          </p>
+        <section className="relative bg-brand-red-deep text-white rounded-[18px] p-[22px] pb-[28px] text-center overflow-hidden shadow-[0_18px_40px_-16px_rgba(214,0,9,0.6)]">
+          <GableWatermark stroke="stroke-white/[0.12]" />
+          <CropMarks color="border-white/50" />
+          <div className="relative">
+            <CardLabel label="Start your project" index={6} tone="red" />
+            <h2 className="font-display text-[22px] font-bold mb-[10px] leading-[1.25] mt-2">
+              Tell us what you're planning
+            </h2>
+            <p className="text-[14px] leading-[1.6] text-white/90 mb-[20px] max-w-[300px] mx-auto">
+              Send a few details and photos of your property and we'll come back to you with the next steps.
+            </p>
 
-          <ul className="flex justify-center gap-6 mb-[24px]" aria-label="What to send">
-            {ENQUIRY_PROMPTS.map(({ icon: Icon, label }) => (
-              <li key={label} className="flex flex-col items-center gap-[6px]">
-                <span className="w-10 h-10 rounded-full bg-brand-red-tint border border-brand-red/40 flex items-center justify-center text-brand-red-deep">
-                  <Icon className="w-[18px] h-[18px]" strokeWidth={1.75} aria-hidden="true" />
-                </span>
-                <span className="font-mono text-[10px] tracking-[0.08em] uppercase text-brand-graphite">{label}</span>
-              </li>
-            ))}
-          </ul>
+            <ul className="flex justify-center gap-6 mb-[22px]" aria-label="What to send">
+              {ENQUIRY_PROMPTS.map(({ icon: Icon, label }) => (
+                <li key={label} className="flex flex-col items-center gap-[6px]">
+                  <span className="w-10 h-10 rounded-full bg-white/15 border border-white/35 flex items-center justify-center">
+                    <Icon className="w-[18px] h-[18px]" strokeWidth={1.75} aria-hidden="true" />
+                  </span>
+                  <span className="font-mono text-[10px] tracking-[0.08em] uppercase text-white/85">{label}</span>
+                </li>
+              ))}
+            </ul>
 
-          <a href={mailtoLink('Project enquiry')} className="inline-flex items-center gap-2 bg-brand-red-deep text-white p-[13px_22px] rounded-lg text-[14px] font-semibold hover:brightness-110 active:scale-95 transition-all focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3">
-            <Mail className="w-4 h-4" /> Email {CONTACT_EMAIL}
-          </a>
+            <a href={mailtoLink('Project enquiry')} className="inline-flex items-center gap-2 bg-white text-brand-red-deep p-[13px_22px] rounded-lg text-[14px] font-semibold hover:bg-brand-paper active:scale-95 transition-all focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-3">
+              <Mail className="w-4 h-4" /> Email {CONTACT_EMAIL}
+            </a>
 
-          <button
-            onClick={downloadVCard}
-            className="mt-3 mx-auto flex items-center justify-center gap-2 text-[12px] font-mono tracking-[0.02em] text-brand-graphite hover:text-brand-red-deep transition-colors focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3"
-          >
-            <ArrowDown className="w-4 h-4" /> Save our contact
-          </button>
+            <button
+              onClick={downloadVCard}
+              className="mt-3 mx-auto flex items-center justify-center gap-2 text-[12px] font-mono tracking-[0.02em] text-white/85 hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-3"
+            >
+              <ArrowDown className="w-4 h-4" /> Save our contact
+            </button>
+          </div>
         </section>
 
         {/* FOOTER */}
-        <footer className="p-[26px_24px_34px] text-center bg-brand-ink text-brand-steel">
-          <div className="font-display font-semibold text-[14px] text-brand-paper mb-[6px]">
+        <footer className="pt-[10px] text-center text-brand-graphite">
+          <div className="font-display font-semibold text-[13.5px] text-brand-ink mb-[6px]">
             Designed with purpose. Planned for approval<span className="text-brand-red">.</span>
           </div>
           <div className="font-mono text-[10px] tracking-[0.06em] flex items-center justify-center gap-1.5 flex-wrap">
-            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-brand-paper transition-colors">{CONTACT_EMAIL}</a>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-brand-red-deep transition-colors">{CONTACT_EMAIL}</a>
             <span>·</span>
             <span>United Kingdom</span>
             <span>·</span>
