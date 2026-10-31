@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { ArrowUpRight, ArrowDown, Share2, X, CheckCircle, Mail, Home, KeyRound, TrendingUp } from 'lucide-react';
+import {
+  ArrowUpRight, ArrowDown, Share2, X, CheckCircle, Mail, Home, KeyRound, TrendingUp,
+  FileCheck, ShieldCheck, MessagesSquare, ArrowLeftRight, HousePlus, Triangle, PaintRoller, BedDouble,
+  Ruler, DraftingCompass, Rotate3d, PencilRuler, HardHat, Camera, MapPin, Lightbulb,
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
@@ -14,6 +18,48 @@ const PROJECT_TYPES = [
   'Change of use',
   'New build',
   'Other',
+];
+
+const PROCESS_STEPS = [
+  { icon: Ruler, label: 'Survey' },
+  { icon: PencilRuler, label: 'Design' },
+  { icon: FileCheck, label: 'Planning' },
+  { icon: HardHat, label: 'Build' },
+];
+
+const SERVICES = [
+  {
+    title: 'Planning & approvals',
+    items: [
+      { icon: FileCheck, name: 'Planning Permission Applications', text: 'Drawings and documents prepared and submitted to your council.' },
+      { icon: ShieldCheck, name: 'Permitted Development & Lawful Development Certificates', text: 'Find out if you can build without full planning, with certainty in writing.' },
+      { icon: MessagesSquare, name: 'Pre-Application Advice', text: 'Test your idea with the council before applying.' },
+      { icon: ArrowLeftRight, name: 'Prior Approval & Change of Use', text: 'Routes such as commercial-to-residential for landlords and investors.' },
+    ],
+  },
+  {
+    title: 'Design',
+    items: [
+      { icon: HousePlus, name: 'House Extensions', text: 'Single and double storey, side return and wrap-around.' },
+      { icon: Triangle, name: 'Loft Conversions', text: 'Dormer, hip-to-gable and mansard lofts that add bedrooms and value.' },
+      { icon: PaintRoller, name: 'Renovations & Remodelling', text: 'Open-plan living, reconfiguration and whole-house refurbishments.' },
+      { icon: BedDouble, name: 'HMO & Flat Conversions', text: 'Layouts planned around space standards, fire safety and rental demand.' },
+    ],
+  },
+  {
+    title: 'Technical drawings',
+    items: [
+      { icon: Ruler, name: 'Measured Surveys', text: 'Accurate drawings of your property as it stands today.' },
+      { icon: DraftingCompass, name: 'Building Regulations Drawings', text: 'Detailed drawings for Building Control and for your builder.' },
+      { icon: Rotate3d, name: '3D Visuals', text: "See your design before it's built, and decide with confidence." },
+    ],
+  },
+];
+
+const ENQUIRY_PROMPTS = [
+  { icon: Camera, label: 'Photos' },
+  { icon: MapPin, label: 'Postcode' },
+  { icon: Lightbulb, label: 'Your idea' },
 ];
 
 const formatPhoneNumber = (value: string) => {
@@ -409,6 +455,20 @@ export default function Index() {
             </p>
           </div>
 
+          <div className="relative mt-8">
+            <div className="absolute top-[22px] left-[12.5%] right-[12.5%] border-t border-dashed border-brand-red/50" aria-hidden="true" />
+            <ol className="relative grid grid-cols-4" aria-label="How a project runs">
+              {PROCESS_STEPS.map(({ icon: Icon, label }) => (
+                <li key={label} className="flex flex-col items-center gap-2">
+                  <span className="w-11 h-11 rounded-full bg-white border border-brand-concrete shadow-sm flex items-center justify-center text-brand-red-deep">
+                    <Icon className="w-5 h-5" strokeWidth={1.75} aria-hidden="true" />
+                  </span>
+                  <span className="font-mono text-[10px] tracking-[0.08em] uppercase text-brand-graphite">{label}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+
           <div className="mt-10 pt-8 border-t border-brand-concrete">
             <div className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-brand-red-deep mb-[16px]">Our approach</div>
             <div className="space-y-6">
@@ -483,76 +543,43 @@ export default function Index() {
             From first sketch to approval
           </h2>
 
-          <div className="grid grid-cols-[auto_1fr] gap-[14px] py-4 border-t border-brand-steel/20">
-            <div className="font-mono text-[11px] text-brand-red pt-[2px]">01</div>
-            <div>
-              <h3 className="font-display text-[16.5px] font-semibold mb-3">Planning &amp; approvals</h3>
-              <div className="space-y-4">
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">Planning Permission Applications</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">Drawings and supporting documents prepared and submitted to your local planning authority.</p>
-                </div>
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">Permitted Development &amp; Lawful Development Certificates</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">Find out if you can build without full planning permission, and get certainty in writing.</p>
-                </div>
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">Pre-Application Advice</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">Test your idea with the council before committing to a full application.</p>
-                </div>
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">Prior Approval &amp; Change of Use</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">Routes such as commercial-to-residential conversions for landlords and investors.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <figure className="relative mb-6 rounded-xl overflow-hidden border border-brand-steel/25">
+            <img
+              src="/plans-to-home.jpg"
+              alt="Architectural floor plans with a drafting compass and pencil, beside a tablet showing a finished kitchen"
+              width={800}
+              height={528}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-auto block"
+            />
+            <figcaption className="absolute left-3 bottom-3 bg-brand-ink/85 backdrop-blur-sm text-brand-paper font-mono text-[10px] tracking-[0.1em] uppercase px-[10px] py-[6px] rounded-md flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-red" aria-hidden="true" />
+              From plans to finished home
+            </figcaption>
+          </figure>
 
-          <div className="grid grid-cols-[auto_1fr] gap-[14px] py-4 border-t border-brand-steel/20">
-            <div className="font-mono text-[11px] text-brand-red pt-[2px]">02</div>
-            <div>
-              <h3 className="font-display text-[16.5px] font-semibold mb-3">Design</h3>
+          {SERVICES.map((group, i) => (
+            <div key={group.title} className={`py-4 border-t border-brand-steel/20 ${i === SERVICES.length - 1 ? 'pb-0' : ''}`}>
+              <h3 className="font-display text-[16.5px] font-semibold mb-4 flex items-baseline gap-[10px]">
+                <span className="font-mono text-[11px] font-normal text-brand-red">0{i + 1}</span>
+                {group.title}
+              </h3>
               <div className="space-y-4">
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">House Extensions</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">Single and double storey, side return and wrap-around extensions.</p>
-                </div>
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">Loft Conversions</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">Dormer, hip-to-gable and mansard lofts that add bedrooms and value.</p>
-                </div>
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">Renovations &amp; Remodelling</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">Open-plan living, internal reconfiguration and whole-house refurbishments.</p>
-                </div>
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">HMO &amp; Flat Conversions</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">Layouts planned around space standards, fire safety and rental demand.</p>
-                </div>
+                {group.items.map(({ icon: Icon, name, text }) => (
+                  <div key={name} className="flex gap-3 items-start">
+                    <span className="w-9 h-9 shrink-0 rounded-lg bg-brand-red/10 border border-brand-red/30 flex items-center justify-center text-brand-red">
+                      <Icon className="w-[18px] h-[18px]" strokeWidth={1.75} aria-hidden="true" />
+                    </span>
+                    <div>
+                      <div className="text-[13.5px] font-semibold text-brand-paper mb-[2px] leading-[1.35]">{name}</div>
+                      <p className="text-[12.5px] leading-[1.5] text-brand-steel">{text}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-
-          <div className="grid grid-cols-[auto_1fr] gap-[14px] pt-4 border-t border-brand-steel/20">
-            <div className="font-mono text-[11px] text-brand-red pt-[2px]">03</div>
-            <div>
-              <h3 className="font-display text-[16.5px] font-semibold mb-3">Technical drawings</h3>
-              <div className="space-y-4">
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">Measured Surveys</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">Accurate existing drawings of your property as the starting point for design.</p>
-                </div>
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">Building Regulations Drawings</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">Detailed drawings for Building Control, and for your builder to price and build from.</p>
-                </div>
-                <div>
-                  <div className="text-[13.5px] font-semibold text-brand-paper mb-1">3D Visuals</div>
-                  <p className="text-[12.5px] leading-[1.5] text-brand-steel">See your design before it's built, so you can make decisions with confidence.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </section>
 
         <RoofLine bg="bg-brand-ink" roof="fill-brand-paper" />
@@ -566,6 +593,17 @@ export default function Index() {
           <p className="text-[14px] leading-[1.6] text-brand-graphite mb-[22px] max-w-[320px] mx-auto">
             Send a few details and photos of your property and we'll come back to you with the next steps.
           </p>
+
+          <ul className="flex justify-center gap-6 mb-[24px]" aria-label="What to send">
+            {ENQUIRY_PROMPTS.map(({ icon: Icon, label }) => (
+              <li key={label} className="flex flex-col items-center gap-[6px]">
+                <span className="w-10 h-10 rounded-full bg-brand-red-tint border border-brand-red/40 flex items-center justify-center text-brand-red-deep">
+                  <Icon className="w-[18px] h-[18px]" strokeWidth={1.75} aria-hidden="true" />
+                </span>
+                <span className="font-mono text-[10px] tracking-[0.08em] uppercase text-brand-graphite">{label}</span>
+              </li>
+            ))}
+          </ul>
 
           <a href={mailtoLink('Project enquiry')} className="inline-flex items-center gap-2 bg-brand-red-deep text-white p-[13px_22px] rounded-lg text-[14px] font-semibold hover:brightness-110 active:scale-95 transition-all focus-visible:outline-2 focus-visible:outline-brand-red focus-visible:outline-offset-3">
             <Mail className="w-4 h-4" /> Email {CONTACT_EMAIL}
