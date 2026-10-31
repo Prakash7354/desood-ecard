@@ -8,3 +8,4 @@ dist-ssr
 package-lock.json
 *.log
 .wrangler
+.claude/settings.local.json
